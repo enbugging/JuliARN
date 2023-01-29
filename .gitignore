@@ -1,1 +1,6 @@
 .vscode
+CMakeFiles
+lib/cgal
+build
+CMakeCache.txt
+linux_build
