@@ -17,6 +17,11 @@ ExternalProject_Add(CGAL
     BUILD_ALWAYS "" 
     INSTALL_COMMAND "" 
 )
+
+list(APPEND includePath 
+    "${CMAKE_BINARY_DIR}/install/cgal/include"
+)
+
 if (WIN32)
     ExternalProject_Add(cgal_dependencies
         URL https://github.com/CGAL/cgal/releases/download/v5.5.1/CGAL-5.5.1-win64-auxiliary-libraries-gmp-mpfr.zip
@@ -35,8 +40,9 @@ if (WIN32)
     set(BOOST_BUILD_CMD ${CMAKE_CURRENT_BINARY_DIR}/boost-prefix/src/boost/b2.exe)
 
     ExternalProject_Add(boost
-        GIT_REPOSITORY https://github.com/boostorg/boost.git
-        GIT_TAG boost-1.78.0
+        URL https://github.com/boostorg/boost/releases/download/boost-1.81.0/boost-1.81.0.zip
+        #GIT_REPOSITORY https://github.com/boostorg/boost.git
+        #GIT_TAG boost-1.78.0
         CONFIGURE_COMMAND ${BOOST_BOOTSTRAP_CMD}
         BUILD_COMMAND
             ${BOOST_BUILD_CMD}
@@ -55,12 +61,12 @@ if (WIN32)
 
     add_dependencies(CGAL boost)
     add_dependencies(CGAL cgal_dependencies)
-endif()
 
-list(APPEND includePath 
-    "${CMAKE_BINARY_DIR}/install/cgal/include"
-    "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
-)
+    list(APPEND includePath
+        "${CMAKE_BINARY_DIR}/install/cgal/auxiliary/gmp/include"
+        "${CMAKE_BINARY_DIR}/install/boost/include/boost-1_81/"
+    )
+endif()
 
 add_executable(sandbox ./sandbox/sandbox.cpp)
 add_dependencies(sandbox CGAL)
